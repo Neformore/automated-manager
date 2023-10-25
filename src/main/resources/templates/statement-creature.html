@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <title>Создание заявления</title>
+</head>
+<body>
+<div class="container">
+    <h2>Создание заявления</h2>
+    <form th:method="post" th:action="@{/statement}" th:object="${statement}">
+        <label>Введите имя</label>
+        <input type="text" th:field="*{firstName}" class="form-control mt-2" id="firstName">
+        <div style="color: red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">firstName error</div>
+        <br/>
+        <label>Введите фамилию</label>
+        <input type="text" th:field="*{secondName}" class="form-control mt-2" id="secondName">
+        <div style="color: red" th:if="${#fields.hasErrors('secondName')}" th:errors="*{secondName}">secondName error</div>
+        <br/>
+        <label>Введите отчество</label>
+        <input type="text" th:field="*{thirdName}" class="form-control mt-2" id="thirdName">
+        <div style="color: red" th:if="${#fields.hasErrors('thirdName')}" th:errors="*{thirdName}">thirdName error</div>
+        <br/>
+
+        <label>Введите серию паспорта</label>
+        <input type="text" th:field="*{passportSeries}" class="form-control mt-2" id="passportSeries">
+        <div style="color: red" th:if="${#fields.hasErrors('passportSeries')}" th:errors="*{passportSeries}">passportSeries error</div>
+        <br/>
+        <label>Введите номер паспорта</label>
+        <input type="text" th:field="*{passportNumber}" class="form-control mt-2" id="passportNumber">
+        <div style="color: red" th:if="${#fields.hasErrors('passportNumber')}" th:errors="*{passportNumber}">passportNumber error</div>
+        <br/>
+
+        <label>Ваше семейное положение</label>
+        <p style="margin-top: 10px"><input type="radio" name="familyStatus" value="true"> Состою в браке</p>
+        <p><input type="radio" checked name="familyStatus" value="false"> Не состою в браке</p>
+
+        <label>Введите имя вашей страны</label>
+        <input type="text" th:field="*{countryName}" class="form-control mt-2" id="countryName">
+        <div style="color: red" th:if="${#fields.hasErrors('countryName')}" th:errors="*{countryName}">countryName error</div>
+        <br/>
+        <label>Введите имя вашего города</label>
+        <input type="text" th:field="*{cityName}" class="form-control mt-2" id="cityName">
+        <div style="color: red" th:if="${#fields.hasErrors('cityName')}" th:errors="*{cityName}">cityName error</div>
+        <br/>
+        <label>Введите имя улицы</label>
+        <input type="text" th:field="*{streetName}" class="form-control mt-2" id="streetName">
+        <div style="color: red" th:if="${#fields.hasErrors('streetName')}" th:errors="*{streetName}">streetName error</div>
+        <br/>
+        <label>Введите номер дома</label>
+        <input type="text" th:field="*{houseNumber}" class="form-control mt-2" id="houseNumber">
+        <div style="color: red" th:if="${#fields.hasErrors('houseNumber')}" th:errors="*{houseNumber}">houseNumber error</div>
+        <br/>
+
+        <label>Введите номер телефона (например: 9093134123)</label>
+        <input type="text" th:field="*{telephoneNumber}" class="form-control mt-2" id="telephoneNumber">
+        <div style="color: red" th:if="${#fields.hasErrors('telephoneNumber')}" th:errors="*{telephoneNumber}">telephoneNumber error</div>
+        <br/>
+
+        <label>Введите название организации, в которой вы работаете</label>
+        <input type="text" th:field="*{organizationName}" class="form-control mt-2" id="organizationName">
+        <div style="color: red" th:if="${#fields.hasErrors('organizationName')}" th:errors="*{organizationName}">organizationName error</div>
+        <br/>
+        <label>Введите название вашей должности</label>
+        <input type="text" th:field="*{jobTitle}" class="form-control mt-2" id="jobTitle">
+        <div style="color: red" th:if="${#fields.hasErrors('jobTitle')}" th:errors="*{jobTitle}">jobTitle error</div>
+        <br/>
+        <label>Введите дату начала контракта трудоустройства</label>
+        <input type="date" th:field="*{startWork}" class="form-control mt-2" id="startWork">
+        <div style="color: red" th:if="${#fields.hasErrors('startWork')}" th:errors="*{startWork}">startWork error</div>
+        <br/>
+        <label>Введите дату окончания контракта трудоустройства</label>
+        <input type="date" th:field="*{stopWork}" class="form-control mt-2" id="stopWork"><br/>
+        <div style="color: red" th:if="${#fields.hasErrors('stopWork')}" th:errors="*{stopWork}">stopWork error</div>
+        <br/>
+
+        <label>Введите желаемую сумму кредита</label>
+        <input type="number" th:field="*{amountMoney}" class="form-control mt-2" id="amountMoney">
+        <div style="color: red" th:if="${#fields.hasErrors('amountMoney')}" th:errors="*{amountMoney}">amountMoney error</div>
+        <br/>
+
+        <button type="submit" class="btn btn-success">Отправить заявление</button>
+    </form>
+</div>
+</body>
+</html>
