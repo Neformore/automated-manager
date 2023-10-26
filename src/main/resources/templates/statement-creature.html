@@ -70,8 +70,8 @@
         <div style="color: red" th:if="${#fields.hasErrors('startWork')}" th:errors="*{startWork}">startWork error</div>
         <br/>
         <label>Введите дату окончания контракта трудоустройства</label>
-        <input type="date" th:field="*{stopWork}" class="form-control mt-2" id="stopWork"><br/>
-        <div style="color: red" th:if="${#fields.hasErrors('stopWork')}" th:errors="*{stopWork}">stopWork error</div>
+        <input type="date" th:field="*{endWork}" class="form-control mt-2" id="stopWork"><br/>
+        <div style="color: red" th:if="${#fields.hasErrors('endWork')}" th:errors="*{endWork}">endWork error</div>
         <br/>
 
         <label>Введите желаемую сумму кредита</label>

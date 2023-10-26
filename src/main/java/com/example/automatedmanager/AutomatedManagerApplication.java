@@ -1,8 +1,10 @@
 package com.example.automatedmanager;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -14,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.Objects;
 import java.util.Properties;
 
-@SpringBootApplication
+@SpringBootApplication(exclude =  HibernateJpaAutoConfiguration.class)
 public class AutomatedManagerApplication {
 
 	private final Environment environment;
@@ -26,6 +28,11 @@ public class AutomatedManagerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AutomatedManagerApplication.class, args);
+	}
+
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
 	}
 
 	@Bean

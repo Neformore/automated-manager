@@ -4,18 +4,18 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "address")
 @NoArgsConstructor
 @Data
-public class Address {
+public class Address implements Serializable {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @OneToOne
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
+    private Client client;
 
     @Column(name = "country_name")
     private String countryName;
@@ -28,7 +28,4 @@ public class Address {
 
     @Column(name = "house_number")
     private String houseNumber;
-
-    @OneToMany(mappedBy = "address")
-    private List<Client> clients;
 }

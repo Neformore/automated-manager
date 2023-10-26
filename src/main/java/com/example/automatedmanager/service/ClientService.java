@@ -1,0 +1,93 @@
+package com.example.automatedmanager.service;
+
+import com.example.automatedmanager.dao.AddressDao;
+import com.example.automatedmanager.dao.ClientDao;
+import com.example.automatedmanager.dao.EmploymentDao;
+import com.example.automatedmanager.dao.PassportDao;
+import com.example.automatedmanager.dto.StatementDTO;
+import com.example.automatedmanager.model.Address;
+import com.example.automatedmanager.model.Client;
+import com.example.automatedmanager.model.Employment;
+import com.example.automatedmanager.model.Passport;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class ClientService {
+
+    private final ClientDao clientDao;
+    private final ModelMapper modelMapper;
+    private final AddressDao addressDao;
+    private final EmploymentDao employmentDao;
+    private final PassportDao passportDao;
+
+    @Autowired
+    public ClientService(ClientDao clientDao, ModelMapper modelMapper, AddressDao addressDao, EmploymentDao employmentDao, PassportDao passportDao) {
+        this.clientDao = clientDao;
+        this.modelMapper = modelMapper;
+        this.addressDao = addressDao;
+        this.employmentDao = employmentDao;
+        this.passportDao = passportDao;
+    }
+
+    public Client getClient(StatementDTO statementDTO) {
+        Client client = checkClient(statementDTO);
+        if (client != null) {
+            return client;
+        } else {
+            client = convertToClient(statementDTO);
+            clientDao.save(client);
+
+            Address address = convertToAddress(statementDTO);
+            address.setClient(client);
+            addressDao.save(address);
+
+            Employment employment = converToEmployment(statementDTO);
+            employment.setClient(client);
+            employmentDao.save(employment);
+
+            Passport passport = convertToPassport(statementDTO);
+            passport.setClient(client);
+            passportDao.save(passport);
+
+            return client;
+        }
+    }
+
+    private Client checkClient(StatementDTO statementDTO) {
+        Optional<Passport> passport = passportDao.findPassport(Integer.parseInt(statementDTO.getPassportSeries()),
+                Integer.parseInt(statementDTO.getPassportNumber()));
+
+        Optional<Client> client = clientDao.findClientByFio(statementDTO.getFirstName(),
+                statementDTO.getSecondName(),
+                statementDTO.getThirdName());
+
+        if (passport.isPresent() && client.isPresent()) {
+            if (passport.get().getClient().getId() == client.get().getId())
+                return client.get();
+            else
+                return null;
+        } else {
+            return null;
+        }
+    }
+
+    private Client convertToClient(StatementDTO statementDTO) {
+        return modelMapper.map(statementDTO, Client.class);
+    }
+
+    private Address convertToAddress(StatementDTO statementDTO) {
+        return modelMapper.map(statementDTO, Address.class);
+    }
+
+    private Employment converToEmployment(StatementDTO statementDTO) {
+        return modelMapper.map(statementDTO, Employment.class);
+    }
+
+    private Passport convertToPassport(StatementDTO statementDTO) {
+        return modelMapper.map(statementDTO, Passport.class);
+    }
+}

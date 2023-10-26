@@ -39,18 +39,14 @@ public class Client {
     @NotNull
     private Boolean familyStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    @NotNull
+    @OneToOne(mappedBy = "client")
     private Address address;
 
     @OneToOne(mappedBy = "client")
     private Passport passport;
 
-    @OneToOne
-    @JoinColumn(name = "employment_id", referencedColumnName = "id")
-    @NotNull
-    private Employment employmentId;
+    @OneToOne(mappedBy = "client")
+    private Employment employment;
 
     @OneToMany(mappedBy = "client")
     private List<CreditContract> creditContracts;

@@ -5,28 +5,29 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "employment")
 @NoArgsConstructor
 @Data
-public class Employment {
+public class Employment implements Serializable {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @OneToOne
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
+    private Client client;
 
     @Column(name = "start_work")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date startWork;
 
-    @Column(name = "stop_work")
+    @Column(name = "end_work")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date stopWork;
+    private Date endWork;
 
     @Column(name = "job_title")
     private String jobTitle;
@@ -34,6 +35,4 @@ public class Employment {
     @Column(name = "organization_name")
     private String organizationName;
 
-    @OneToOne(mappedBy = "employmentId")
-    private Client client;
 }

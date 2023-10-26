@@ -21,4 +21,9 @@ public class CreditStatement {
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
+
+    public CreditStatement(boolean status, Client client) {
+        this.status = status;
+        this.client = client;
+    }
 }

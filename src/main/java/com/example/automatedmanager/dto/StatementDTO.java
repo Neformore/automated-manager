@@ -47,7 +47,7 @@ public class StatementDTO {
     private String startWork;
 
     @NotNull
-    private String stopWork;
+    private String endWork;
 
     @NotEmpty
     private String jobTitle;

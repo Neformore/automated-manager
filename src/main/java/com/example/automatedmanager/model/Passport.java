@@ -18,8 +18,8 @@ public class Passport implements Serializable {
     private Client client;
 
     @Column(name = "series")
-    private int series;
+    private int passportSeries;
 
     @Column(name = "number")
-    private int number;
+    private int passportNumber;
 }
