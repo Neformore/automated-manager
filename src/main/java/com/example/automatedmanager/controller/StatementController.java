@@ -1,13 +1,16 @@
 package com.example.automatedmanager.controller;
 
+import com.example.automatedmanager.dto.CreditContractDTO;
 import com.example.automatedmanager.dto.StatementDTO;
 import com.example.automatedmanager.model.Client;
+import com.example.automatedmanager.model.CreditContract;
 import com.example.automatedmanager.service.ClientService;
 import com.example.automatedmanager.service.CreditStatementService;
 import com.example.automatedmanager.util.StatementValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,23 +31,34 @@ public class StatementController {
 
     @GetMapping
     public String getStatementCreaturePage(@ModelAttribute("statement") StatementDTO statementDTO) {
-        return "statement-creature";
+        return "statement/statement-creature";
     }
 
     @PostMapping
-    public String createStatement(@ModelAttribute("statement") @Valid StatementDTO statementDTO, BindingResult bindingResult) {
-        // первая проверка на синтаксическое содержание формы (пустые поля, соответские regex и тд)
+    public String createStatement(@ModelAttribute("statement") @Valid StatementDTO statementDTO,
+                                  BindingResult bindingResult,
+                                  Model model) {
+        // первая проверка на синтаксическое содержание формы (пустые поля, соответствие regex и тд)
         if (bindingResult.hasErrors()) {
-            return "statement-creature";
+            return "statement/statement-creature";
         }
         // вторая проверка на валидность полученных значений (повторения с записями в бд)
         statementValidator.validate(statementDTO , bindingResult);
         if (bindingResult.hasErrors()) {
-            return "statement-creature";
+            return "statement/statement-creature";
         }
 
         Client client = clientService.getClient(statementDTO);
-        System.out.println();
-        return "redirect:/statement";
+        CreditContract creditContract = creditStatementService.approval(client, statementDTO.getAmountMoney());
+        if (creditContract != null) {
+            CreditContractDTO creditContractDTO = new CreditContractDTO(creditContract.getAmountMoney(),
+                    creditContract.getAmountDays());
+
+            model.addAttribute("creditContractDTO", creditContractDTO);
+            model.addAttribute("client", client);
+            return "statement/signature-page";
+        }
+
+        return "statement/refusal-page.html";
     }
 }

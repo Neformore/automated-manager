@@ -33,6 +33,9 @@ public class ClientService {
         this.passportDao = passportDao;
     }
 
+    public Client getClient(int clientId) {
+        return clientDao.findById(clientId);
+    }
 
     // возвращает пользователя из БД, если тот найден, или создает и возвращет нового
     public Client getClient(StatementDTO statementDTO) {

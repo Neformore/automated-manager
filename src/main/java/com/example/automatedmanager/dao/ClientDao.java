@@ -45,4 +45,10 @@ public class ClientDao {
                 .setParameter("telephoneNumber", telephoneNumber)
                 .stream().findAny();
     }
+
+    @Transactional
+    public Client findById(int clientId) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Client.class, clientId);
+    }
 }

@@ -53,4 +53,21 @@ public class Client {
 
     @OneToMany(mappedBy = "client")
     private List<CreditStatement> creditStatements;
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", thirdName='" + thirdName + '\'' +
+                ", telephoneNumber='" + telephoneNumber + '\'' +
+                ", familyStatus=" + familyStatus +
+                ", address=" + address +
+                ", passport=" + passport +
+                ", employment=" + employment +
+                ", creditContracts=" + creditContracts +
+                ", creditStatements=" + creditStatements +
+                '}';
+    }
 }

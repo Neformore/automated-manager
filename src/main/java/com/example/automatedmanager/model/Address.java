@@ -35,4 +35,15 @@ public class Address implements Serializable {
         this.streetName = streetName;
         this.houseNumber = houseNumber;
     }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "client=" + client +
+                ", countryName='" + countryName + '\'' +
+                ", cityName='" + cityName + '\'' +
+                ", streetName='" + streetName + '\'' +
+                ", houseNumber='" + houseNumber + '\'' +
+                '}';
+    }
 }

@@ -1,8 +1,8 @@
 package com.example.automatedmanager.service;
 
 import com.example.automatedmanager.dao.CreditStatementDao;
-import com.example.automatedmanager.dto.StatementDTO;
 import com.example.automatedmanager.model.Client;
+import com.example.automatedmanager.model.CreditContract;
 import com.example.automatedmanager.model.CreditStatement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,16 +13,26 @@ import java.util.Random;
 public class CreditStatementService {
 
     private final CreditStatementDao creditStatementDao;
-    private final ClientService clientService;
 
     @Autowired
-    public CreditStatementService(CreditStatementDao creditStatementDao, ClientService clientService) {
+    public CreditStatementService(CreditStatementDao creditStatementDao) {
         this.creditStatementDao = creditStatementDao;
-        this.clientService = clientService;
     }
 
-    public void approval(StatementDTO statementDTO) {
-//        CreditStatement creditStatement = new CreditStatement(new Random().nextBoolean(), client);
-//        creditStatementDao.save(creditStatement);
+    public CreditContract approval(Client client, int amountMoney) {
+        Random random = new Random();
+
+        CreditStatement creditStatement = new CreditStatement(true, client);
+
+        creditStatementDao.save(creditStatement);
+
+        if (creditStatement.isStatus()) {
+            CreditContract creditContract = new CreditContract();
+
+            creditContract.setAmountMoney(amountMoney);
+            creditContract.setAmountDays(random.nextInt(365 - 30 + 1) + 30); // диапазон от 30 до 365 дней (1 - 12 мес.)
+            return creditContract;
+        }
+        return null;
     }
 }
