@@ -33,8 +33,12 @@ public class StatementController {
 
     @PostMapping
     public String createStatement(@ModelAttribute("statement") @Valid StatementDTO statementDTO, BindingResult bindingResult) {
+        // первая проверка на синтаксическое содержание формы (пустые поля, соответские regex и тд)
+        if (bindingResult.hasErrors()) {
+            return "statement-creature";
+        }
+        // вторая проверка на валидность полученных значений (повторения с записями в бд)
         statementValidator.validate(statementDTO , bindingResult);
-
         if (bindingResult.hasErrors()) {
             return "statement-creature";
         }

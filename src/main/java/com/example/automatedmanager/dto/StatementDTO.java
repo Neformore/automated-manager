@@ -43,7 +43,6 @@ public class StatementDTO {
     @Pattern(regexp = "9[0-9]{9}", message = "Введен некорректный номер телефона")
     private String telephoneNumber;
 
-    @NotNull
     private String startWork;
 
     @NotNull

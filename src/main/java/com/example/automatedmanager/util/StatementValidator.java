@@ -12,6 +12,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
 @Component
@@ -37,6 +40,16 @@ public class StatementValidator implements Validator {
     public void validate(Object target, Errors errors) {
         StatementDTO statementDTO = (StatementDTO) target;
 
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date startWork = format.parse(statementDTO.getStartWork());
+            Date endWork = format.parse(statementDTO.getEndWork());
+            if (startWork.getTime() > endWork.getTime()) {
+                errors.rejectValue("startWork", "", "Дата начала рабочего контракта не может быть больше даты его окончания");
+            }
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
         // проверяем пользователя по ФИО, если значения полей сущности, вернувшейся из
         // БД полностью не совпадают со значениями формы, то записываем ошибку
         if (!checkByFio(statementDTO)) {
@@ -59,8 +72,7 @@ public class StatementValidator implements Validator {
                     "но у него были другие значения ключевых полей (ФИО, паспортные данные, прописка, место работы), " +
                     "пожалуйста проверте правильность вводимых данных и попробуйте еще раз");
         }
-        // если поля ФИО и паспорта валидны, а
-        if (checkByAddress(statementDTO) || (!checkByFio(statementDTO) && !checkByPassport(statementDTO)) ) {
+        if (!checkByAddress(statementDTO)) {
             errors.rejectValue("countryName", "", "Ошибка, " +
                     "пользователь с указанными ФИО и паспортными данными живет по другой прописке, " +
                     "пожалуйста проверте правильность вводимых данных и попробуйте еще раз");
@@ -99,25 +111,46 @@ public class StatementValidator implements Validator {
                 statementDTO.getHouseNumber());
 
         Optional<Address> addressOptional = addressDao.findAddress(address);
-//         if ()
+        Optional<Client> client = clientDao.findClientByTelephone(statementDTO.getTelephoneNumber());
 
-        return addressOptional.map(value -> checkFields(value.getClient(), statementDTO)).orElse(true);
+        // если пользователя нет в БД вернем true
+        if (client.isEmpty())
+            return true;
+
+        // если пользователь полученный по прописке не равен пользователю полученному по номеру телефона
+        // значит новая прописка уникальна, вернем true
+        if (addressOptional.isPresent()) {
+            if (addressOptional.get().getClient().getId() == client.get().getId()) {
+                // если пользователи совпали значит нужно проверить равенство их прописки
+                // в случае если прописки у пользователя разные то вернем ошибку
+                return addressOptional.map(value -> checkFields(value.getClient(), statementDTO)).orElse(true);
+            } else return true; // клиенты не совпали значит правильность адресов проверять не нужно
+        } else return true; //адрес не найден
     }
 
     // метод проверяет равенство полей клиента с полями полученными из формы
     private boolean checkFields(Client client, StatementDTO statementDTO) {
-        return client.getTelephoneNumber().equals(statementDTO.getTelephoneNumber()) &&
-                client.getFamilyStatus() == statementDTO.getFamilyStatus() &&
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date startWork = format.parse(statementDTO.getStartWork());
+            Date endWork = format.parse(statementDTO.getEndWork());
+            return client.getTelephoneNumber().equals(statementDTO.getTelephoneNumber()) &&
+                    client.getFamilyStatus() == statementDTO.getFamilyStatus() &&
 
-                client.getPassport().getPassportSeries() == Integer.parseInt(statementDTO.getPassportSeries()) &&
-                client.getPassport().getPassportNumber() == Integer.parseInt((statementDTO.getPassportNumber())) &&
+                    client.getPassport().getPassportSeries() == Integer.parseInt(statementDTO.getPassportSeries()) &&
+                    client.getPassport().getPassportNumber() == Integer.parseInt((statementDTO.getPassportNumber())) &&
 
-                client.getEmployment().getOrganizationName().equals(statementDTO.getOrganizationName()) &&
-                client.getEmployment().getJobTitle().equals(statementDTO.getJobTitle()) &&
+                    client.getEmployment().getOrganizationName().equals(statementDTO.getOrganizationName()) &&
+                    client.getEmployment().getJobTitle().equals(statementDTO.getJobTitle()) &&
+                    client.getEmployment().getStartWork().getTime() == startWork.getTime() &&
+                    client.getEmployment().getEndWork().getTime() == endWork.getTime() &&
 
-                client.getAddress().getCountryName().equals(statementDTO.getCountryName()) &&
-                client.getAddress().getCityName().equals(statementDTO.getCityName()) &&
-                client.getAddress().getStreetName().equals(statementDTO.getStreetName()) &&
-                client.getAddress().getHouseNumber().equals(statementDTO.getHouseNumber());
+                    client.getAddress().getCountryName().equals(statementDTO.getCountryName()) &&
+                    client.getAddress().getCityName().equals(statementDTO.getCityName()) &&
+                    client.getAddress().getStreetName().equals(statementDTO.getStreetName()) &&
+                    client.getAddress().getHouseNumber().equals(statementDTO.getHouseNumber());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
