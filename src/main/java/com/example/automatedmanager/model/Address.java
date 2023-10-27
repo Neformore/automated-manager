@@ -28,4 +28,11 @@ public class Address implements Serializable {
 
     @Column(name = "house_number")
     private String houseNumber;
+
+    public Address(String countryName, String cityName, String streetName, String houseNumber) {
+        this.countryName = countryName;
+        this.cityName = cityName;
+        this.streetName = streetName;
+        this.houseNumber = houseNumber;
+    }
 }

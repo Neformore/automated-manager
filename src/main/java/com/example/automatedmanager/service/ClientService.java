@@ -33,6 +33,8 @@ public class ClientService {
         this.passportDao = passportDao;
     }
 
+
+    // возвращает пользователя из БД, если тот найден, или создает и возвращет нового
     public Client getClient(StatementDTO statementDTO) {
         Client client = checkClient(statementDTO);
         if (client != null) {
@@ -57,22 +59,11 @@ public class ClientService {
         }
     }
 
-    private Client checkClient(StatementDTO statementDTO) {
-        Optional<Passport> passport = passportDao.findPassport(Integer.parseInt(statementDTO.getPassportSeries()),
-                Integer.parseInt(statementDTO.getPassportNumber()));
-
+    public Client checkClient(StatementDTO statementDTO) {
         Optional<Client> client = clientDao.findClientByFio(statementDTO.getFirstName(),
                 statementDTO.getSecondName(),
                 statementDTO.getThirdName());
-
-        if (passport.isPresent() && client.isPresent()) {
-            if (passport.get().getClient().getId() == client.get().getId())
-                return client.get();
-            else
-                return null;
-        } else {
-            return null;
-        }
+        return client.orElse(null);
     }
 
     private Client convertToClient(StatementDTO statementDTO) {

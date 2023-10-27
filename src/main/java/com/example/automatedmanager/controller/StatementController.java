@@ -38,6 +38,7 @@ public class StatementController {
         if (bindingResult.hasErrors()) {
             return "statement-creature";
         }
+
         Client client = clientService.getClient(statementDTO);
         System.out.println();
         return "redirect:/statement";

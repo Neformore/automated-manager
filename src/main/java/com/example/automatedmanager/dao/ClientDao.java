@@ -37,4 +37,12 @@ public class ClientDao {
                 .setParameter("thirdName", thirdName)
                 .stream().findAny();
     }
+
+    @Transactional
+    public Optional<Client> findClientByTelephone(String telephoneNumber) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select cl from Client cl where cl.telephoneNumber =: telephoneNumber", Client.class)
+                .setParameter("telephoneNumber", telephoneNumber)
+                .stream().findAny();
+    }
 }
