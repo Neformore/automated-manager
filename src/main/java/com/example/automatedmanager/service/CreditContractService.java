@@ -5,6 +5,8 @@ import com.example.automatedmanager.model.CreditContract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CreditContractService {
 
@@ -17,5 +19,9 @@ public class CreditContractService {
 
     public void saveContract(CreditContract creditContract) {
         creditContractDao.save(creditContract);
+    }
+
+    public List<CreditContract> getCreditContracts() {
+        return creditContractDao.index();
     }
 }

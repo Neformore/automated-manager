@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,8 +34,24 @@ public class ClientService {
         this.passportDao = passportDao;
     }
 
+    public List<Client> getClients() {
+        return clientDao.index();
+    }
+
     public Client getClient(int clientId) {
         return clientDao.findById(clientId);
+    }
+
+    public Optional<Client> getClient(String firstName, String secondName, String thirdName) {
+        return clientDao.findClientByFio(firstName, secondName, thirdName);
+    }
+
+    public Optional<Client> getClient(String telephoneNumber) {
+        return clientDao.findClientByTelephone(telephoneNumber);
+    }
+
+    public Optional<Passport> getPassport(Integer series, Integer number) {
+        return passportDao.findPassport(series, number);
     }
 
     // возвращает пользователя из БД, если тот найден, или создает и возвращет нового

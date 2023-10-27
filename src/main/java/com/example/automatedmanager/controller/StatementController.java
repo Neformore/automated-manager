@@ -1,5 +1,6 @@
 package com.example.automatedmanager.controller;
 
+import com.example.automatedmanager.dto.ClientDTO;
 import com.example.automatedmanager.dto.CreditContractDTO;
 import com.example.automatedmanager.dto.StatementDTO;
 import com.example.automatedmanager.model.Client;
@@ -8,6 +9,7 @@ import com.example.automatedmanager.service.ClientService;
 import com.example.automatedmanager.service.CreditStatementService;
 import com.example.automatedmanager.util.StatementValidator;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,12 +23,14 @@ public class StatementController {
     private final ClientService clientService;
     private final CreditStatementService creditStatementService;
     private final StatementValidator statementValidator;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public StatementController(ClientService clientService, CreditStatementService creditStatementService, StatementValidator statementValidator) {
+    public StatementController(ClientService clientService, CreditStatementService creditStatementService, StatementValidator statementValidator, ModelMapper modelMapper) {
         this.clientService = clientService;
         this.creditStatementService = creditStatementService;
         this.statementValidator = statementValidator;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping
@@ -55,10 +59,14 @@ public class StatementController {
                     creditContract.getAmountDays());
 
             model.addAttribute("creditContractDTO", creditContractDTO);
-            model.addAttribute("client", client);
+            model.addAttribute("clientDTO", convertToClientDTO(client));
             return "statement/signature-page";
         }
 
         return "statement/refusal-page.html";
+    }
+
+    private ClientDTO convertToClientDTO(Client client) {
+        return modelMapper.map(client, ClientDTO.class);
     }
 }

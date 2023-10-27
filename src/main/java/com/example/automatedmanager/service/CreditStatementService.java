@@ -7,6 +7,7 @@ import com.example.automatedmanager.model.CreditStatement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -17,6 +18,10 @@ public class CreditStatementService {
     @Autowired
     public CreditStatementService(CreditStatementDao creditStatementDao) {
         this.creditStatementDao = creditStatementDao;
+    }
+
+    public List<CreditStatement> getCreditStatements() {
+        return creditStatementDao.index();
     }
 
     public CreditContract approval(Client client, int amountMoney) {

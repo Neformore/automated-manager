@@ -1,3 +1,12 @@
-<div th:fragment="header" class="header">
-  <h3></h3>
+<div th:fragment="header">
+    <div class="d-flex flex-column flex-mb-row align-items-center pb-3 mb-4 border-bottom">
+        <nav class="d-inline-flex mt-2 mt-mb-0 ms-mb-auto" style="width: 700px; justify-content: space-between">
+            <a href="/main" class="d-flex align-items-center link-body-emphasis text-decoration-none">
+                <span class="fs-4">Главная страница</span>
+            </a>
+            <a href="/statement" class="d-flex align-items-center link-body-emphasis text-decoration-none">
+                <span class="fs-4">Создать заявление</span>
+            </a>
+        </nav>
+    </div>
 </div>

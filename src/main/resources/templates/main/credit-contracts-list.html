@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <title>Список договоров</title>
+</head>
+<body>
+<header class="container" th:insert="~{blocks/header :: header}"></header>
+<div class="container">
+    <h3>Список договоров:</h3>
+    <div th:each="creditContract : ${creditContracts}" class="alert alert-info mt-2">
+        <h4>Договор оформил:</h4>
+        <p>Имя: <span th:text="${creditContract.client.firstName}"></span></p>
+        <p>Фамилия: <span th:text="${creditContract.client.secondName}"></span></p>
+        <p>Отчество: <span th:text="${creditContract.client.thirdName}"></span></p>
+        <p>На сумму: <span th:text="${creditContract.amountMoney}"></span></p>
+        <p>На срок: <span th:text="${creditContract.amountDays} + ' дней'"></span></p>
+        <p>Статус подписи: <span th:text="${creditContract.status}"></span></p>
+        <p>(true - подписан, false - клиент отказался от подписывания договора)</p>
+    </div>
+</div>
+</body>
+</html>

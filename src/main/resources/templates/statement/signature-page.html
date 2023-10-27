@@ -6,6 +6,7 @@
     <title>signature-page</title>
 </head>
 <body>
+<header class="container" th:insert="~{blocks/header :: header}"></header>
  <div class="container">
      <h2>Вам одобрен кредит!</h2>
      <p th:text="'На сумму ' + ${creditContractDTO.amountMoney} + ' рублей'"></p>
@@ -14,13 +15,13 @@
      <form style="margin-bottom: 10px" th:method="post" th:action="@{/credit/signed}" th:object="${creditContractDTO}">
          <input type="hidden" th:value="${creditContractDTO.amountMoney}" th:field="*{amountMoney}">
          <input type="hidden" th:value="${creditContractDTO.amountDays}" th:field="*{amountDays}">
-         <input type="hidden" th:value="${client.id}" name="clientId">
+         <input type="hidden" th:value="${clientDTO.id}" name="clientId">
          <button type="submit" class="btn btn-success">Подписать</button>
      </form>
      <form th:method="post" th:action="@{/credit/refusal}" th:object="${creditContractDTO}">
          <input type="hidden" th:value="${creditContractDTO.amountMoney}" th:field="*{amountMoney}">
          <input type="hidden" th:value="${creditContractDTO.amountDays}" th:field="*{amountDays}">
-         <input type="hidden" th:value="${client.id}" name="clientId">
+         <input type="hidden" th:value="${clientDTO.id}" name="clientId">
          <button type="submit" class="btn btn-success">Отказаться</button>
      </form>
  </div>

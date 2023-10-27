@@ -6,6 +6,7 @@
     <title>Создание заявления</title>
 </head>
 <body>
+<header class="container" th:insert="~{blocks/header :: header}"></header>
 <div class="container">
     <h2>Создание заявления</h2>
     <form th:method="post" th:action="@{/statement}" th:object="${statement}">

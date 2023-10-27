@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -23,6 +24,12 @@ public class ClientDao {
     public void save(Client client) {
         Session session = sessionFactory.getCurrentSession();
         session.persist(client);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Client> index() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select cl from  Client cl", Client.class).getResultList();
     }
 
     @Transactional(readOnly = true)
