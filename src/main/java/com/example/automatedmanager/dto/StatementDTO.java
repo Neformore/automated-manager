@@ -1,5 +1,6 @@
 package com.example.automatedmanager.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -54,5 +55,6 @@ public class StatementDTO {
     private String organizationName;
 
     @NotNull
+    @Min(value = 1, message = "Сумма желаемого кредита должны быть больше нуля")
     private Integer amountMoney;
 }
