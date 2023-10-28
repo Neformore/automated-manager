@@ -43,6 +43,9 @@ public class StatementValidator implements Validator {
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date startWork = format.parse(statementDTO.getStartWork());
+            if(startWork.getTime() > new Date().getTime()) {
+                errors.rejectValue("startWork", "", "Дата начала контракта трудоустройства не может привышать текущую дату");
+            }
             Date endWork = format.parse(statementDTO.getEndWork());
             if (startWork.getTime() > endWork.getTime()) {
                 errors.rejectValue("startWork", "", "Дата начала рабочего контракта не может быть больше даты его окончания");

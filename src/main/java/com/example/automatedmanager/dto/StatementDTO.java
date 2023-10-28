@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 public class StatementDTO {
 
@@ -43,9 +41,10 @@ public class StatementDTO {
     @Pattern(regexp = "9[0-9]{9}", message = "Введен некорректный номер телефона")
     private String telephoneNumber;
 
+    @Pattern(regexp = "[0-9]{4}-[0-9]{2}-[0-9]{2}", message = "Введена некорректная дата")
     private String startWork;
 
-    @NotNull
+    @Pattern(regexp = "[0-9]{4}-[0-9]{2}-[0-9]{2}", message = "Введена некорректная дата")
     private String endWork;
 
     @NotEmpty

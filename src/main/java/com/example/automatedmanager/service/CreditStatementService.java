@@ -26,8 +26,7 @@ public class CreditStatementService {
 
     public CreditContract approval(Client client, int amountMoney) {
         Random random = new Random();
-
-        CreditStatement creditStatement = new CreditStatement(true, client);
+        CreditStatement creditStatement = new CreditStatement(random.nextBoolean(), client);
 
         creditStatementDao.save(creditStatement);
 

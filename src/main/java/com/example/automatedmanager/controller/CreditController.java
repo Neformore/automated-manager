@@ -34,7 +34,7 @@ public class CreditController {
     public String signedContract(@ModelAttribute("creditContractDTO") CreditContractDTO creditContractDTO,
                                  @RequestParam int clientId) {
         creditContractDTO.setStatus(true);
-
+        creditContractDTO.setDateOfSigning(new Date());
         Client client = clientService.getClient(clientId);
         convertAndSave(creditContractDTO, client);
 
@@ -54,7 +54,6 @@ public class CreditController {
 
     private void convertAndSave(CreditContractDTO creditContractDTO, Client client) {
         CreditContract creditContract = convertToCreditContract(creditContractDTO);
-        creditContract.setDateOfSigning(new Date());
         creditContract.setClient(client);
         creditContractService.saveContract(creditContract);
     }

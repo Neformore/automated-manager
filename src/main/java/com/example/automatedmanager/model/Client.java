@@ -20,23 +20,18 @@ public class Client {
     private int id;
 
     @Column(name = "first_name")
-    @Pattern(regexp = "[А-Я][а-я]+", message = "Введено некорректное имя")
     private String firstName;
 
     @Column(name = "second_name")
-    @Pattern(regexp = "[А-Я][а-я]+", message = "Введена некорректная фамилия")
     private String secondName;
 
     @Column(name = "third_name")
-    @Pattern(regexp = "[А-Я][а-я]+", message = "Введено некорректное отчество")
     private String thirdName;
 
     @Column(name = "telephone_number")
-    @Pattern(regexp = "9[0-9]{9}", message = "Введен некорректный номер телефона")
     private String telephoneNumber;
 
     @Column(name = "family_status")
-    @NotNull
     private Boolean familyStatus;
 
     @OneToOne(mappedBy = "client")
@@ -53,21 +48,4 @@ public class Client {
 
     @OneToMany(mappedBy = "client")
     private List<CreditStatement> creditStatements;
-
-    @Override
-    public String toString() {
-        return "Client{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
-                ", thirdName='" + thirdName + '\'' +
-                ", telephoneNumber='" + telephoneNumber + '\'' +
-                ", familyStatus=" + familyStatus +
-                ", address=" + address +
-                ", passport=" + passport +
-                ", employment=" + employment +
-                ", creditContracts=" + creditContracts +
-                ", creditStatements=" + creditStatements +
-                '}';
-    }
 }

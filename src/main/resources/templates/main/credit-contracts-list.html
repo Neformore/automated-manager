@@ -16,8 +16,9 @@
         <p>Отчество: <span th:text="${creditContract.client.thirdName}"></span></p>
         <p>На сумму: <span th:text="${creditContract.amountMoney}"></span></p>
         <p>На срок: <span th:text="${creditContract.amountDays} + ' дней'"></span></p>
+        <p>Дата подписи: <span th:text="${creditContract.dateOfSigning}"></span></p>
         <p>Статус подписи: <span th:text="${creditContract.status}"></span></p>
-        <p>(true - подписан, false - клиент отказался от подписывания договора)</p>
+        <p>(true - подписан, false - клиент отказался от подписания договора)</p>
     </div>
 </div>
 </body>

@@ -42,15 +42,21 @@ public class MainController {
     }
 
     @GetMapping
-    public String getMainPage(Model model) {
+    public String getMainPage() {
+        return "main/main-page";
+    }
+
+    @PostMapping("/get-clients")
+    public String getClients(Model model) {
         model.addAttribute("clients", clientService.getClients()
                 .stream().map(this::convertToClientDTO));
-        return "main/main-page";
+        return "main/clients-list.html";
     }
 
     @PostMapping("/find-client-by-telephone")
     public String findByTelephoneNumber(@RequestParam String telephoneNumber, Model model) {
         Optional<Client> clientOptional = clientService.getClient(telephoneNumber);
+
         if (clientOptional.isPresent()) {
             model.addAttribute("client", convertToClientDTO(clientOptional.get()));
             return "main/client-info";
@@ -73,19 +79,20 @@ public class MainController {
     }
 
     @PostMapping("/find-client-passport-fio")
-    public String findClientByPassport(@RequestParam(required = false) Integer series,
-                                       @RequestParam(required = false) Integer number,
+    public String findClientByPassport(@RequestParam(required = false) String series,
+                                       @RequestParam(required = false) String number,
                                        Model model) {
-        if(series == null || number == null)
+        try {
+            Optional<Passport> passportOptional = clientService.getPassport(Integer.parseInt(series), Integer.parseInt(number));
+
+            if (passportOptional.isPresent()) {
+                model.addAttribute("client", convertToClientDTO(passportOptional.get().getClient()));
+                return "main/client-info";
+            }
             return "errors/error-find-by-passport.html";
-
-        Optional<Passport> passportOptional = clientService.getPassport(series, number);
-
-        if (passportOptional.isPresent()) {
-            model.addAttribute("client", convertToClientDTO(passportOptional.get().getClient()));
-            return "main/client-info";
+        } catch (Exception e) {
+            return "errors/error-find-by-passport.html";
         }
-        return "errors/error-find-by-passport.html";
     }
 
     @PostMapping("/get-statements")
